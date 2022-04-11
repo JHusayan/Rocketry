@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/Fade_In.gd" type="Script" id=1]
+
+[sub_resource type="Animation" id=2]
+resource_name = "Fade_In"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0.141176, 0.137255, 0.137255, 1 ), Color( 0.141176, 0.137255, 0.137255, 0 ) ]
+}
+
+[node name="Fade_Transition" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = -264.0
+margin_top = -304.0
+margin_right = 776.0
+margin_bottom = 1288.0
+color = Color( 0.141176, 0.137255, 0.137255, 0 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ColorRect"]
+anims/Fade_In = SubResource( 2 )
+
+[connection signal="animation_finished" from="ColorRect/AnimationPlayer" to="ColorRect" method="_on_AnimationPlayer_animation_finished"]

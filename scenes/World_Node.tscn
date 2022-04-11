@@ -1,0 +1,159 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://assets/fonts/Lato-Bold.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/sprites/Spotlight.png" type="Texture" id=2]
+[ext_resource path="res://scenes/Meteors_Node.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/Stars_Node.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/Walls.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scripts/Player.gd" type="Script" id=7]
+[ext_resource path="res://assets/sprites/star_tiny.png" type="Texture" id=8]
+[ext_resource path="res://assets/sprites/Rocket_3.png" type="Texture" id=9]
+
+[sub_resource type="DynamicFont" id=1]
+size = 80
+font_data = ExtResource( 1 )
+
+[sub_resource type="Curve" id=2]
+min_value = -360.0
+max_value = 360.0
+_data = [ Vector2( 0, -189.818 ), 0.0, 0.0, 0, 0, Vector2( 0.994535, 254.455 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 2 )
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0.1875, 0.4125, 1 )
+colors = PoolColorArray( 0.0313726, 0.776471, 0.670588, 1, 0.352941, 1, 0.905882, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="Curve" id=6]
+_data = [ Vector2( 0, 0.785227 ), 0.0, 0.0, 0, 0, Vector2( 0.994535, 0.285227 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=7]
+curve = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=8]
+flag_disable_z = true
+direction = Vector3( 0, 1, 0 )
+spread = 1.0
+gravity = Vector3( 0, 98, 0 )
+initial_velocity = 150.0
+initial_velocity_random = 0.5
+angular_velocity = 350.0
+angular_velocity_curve = SubResource( 3 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale_curve = SubResource( 7 )
+color_ramp = SubResource( 5 )
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 830.674, 10 )
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 480, 200 )
+
+[node name="World" type="Node2D"]
+position = Vector2( -480, -10.312 )
+
+[node name="HUD_score" type="CanvasLayer" parent="."]
+
+[node name="Score_Label" type="Label" parent="HUD_score"]
+margin_left = 165.0
+margin_top = 30.0
+margin_right = 315.0
+margin_bottom = 227.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "0
+"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 480, 360 )
+current = true
+
+[node name="Meteors_Node" parent="." instance=ExtResource( 3 )]
+position = Vector2( 480, 16 )
+
+[node name="Meteors_Node2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 622.625, -178.887 )
+
+[node name="Meteors_Node3" parent="." instance=ExtResource( 3 )]
+position = Vector2( 544, -617.339 )
+
+[node name="Meteors_Node4" parent="." instance=ExtResource( 3 )]
+position = Vector2( 309.5, -515.24 )
+
+[node name="Stars_Node" parent="." instance=ExtResource( 4 )]
+position = Vector2( 367.045, -125.716 )
+
+[node name="Stars_Node2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 622.625, -395.593 )
+
+[node name="Walls" parent="." instance=ExtResource( 5 )]
+light_mask = 3
+position = Vector2( 230.963, 289.6 )
+
+[node name="Walls2" parent="." instance=ExtResource( 5 )]
+light_mask = 3
+position = Vector2( 725.19, 281.6 )
+
+[node name="Player_Node" type="Node2D" parent="."]
+position = Vector2( 480, 321.6 )
+
+[node name="Player" type="KinematicBody2D" parent="Player_Node"]
+script = ExtResource( 7 )
+
+[node name="Detect" type="Area2D" parent="Player_Node/Player"]
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Player_Node/Player/Detect"]
+build_mode = 1
+polygon = PoolVector2Array( -1.48645, -32.1985, -6.78375, -23.4579, -10.227, -12.7309, -11.0216, 1.30704, -10.227, 5.41245, -13.9351, 8.32596, -16.3231, 13.4814, -16.8534, 19.315, -15.4392, 24.4415, -12.7875, 19.1382, -9.78232, 17.1937, -7.13068, 16.133, -4.30225, 19.1382, 5.24368, 18.9614, 7.36502, 15.9562, 10.547, 17.3705, 14.2593, 21.7899, 14.9664, 24.4415, 16.9109, 20.7292, 17.4413, 15.6027, 15.6735, 11.1833, 12.3148, 6.58707, 10.547, 5.5264, 10.7238, -3.4892, 10.7238, -9.67639, 8.77924, -17.101, 6.83469, -21.874, 4.3598, -26.6469, 2.06171, -29.6522, 0.117157, -32.127 )
+
+[node name="Particles2D" type="Particles2D" parent="Player_Node/Player"]
+show_behind_parent = true
+position = Vector2( 0, 24.76 )
+amount = 10
+lifetime = 0.6
+local_coords = false
+process_material = SubResource( 8 )
+texture = ExtResource( 8 )
+
+[node name="Light2D" type="Light2D" parent="Player_Node/Player/Particles2D"]
+modulate = Color( 0.94902, 0.682353, 0.188235, 1 )
+position = Vector2( 0.481445, 26.9729 )
+texture = ExtResource( 2 )
+color = Color( 0.352941, 1, 0.905882, 1 )
+energy = 0.5
+shadow_enabled = true
+
+[node name="Resetter" type="Area2D" parent="Player_Node/Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player_Node/Player/Resetter"]
+position = Vector2( 0, 500 )
+shape = SubResource( 9 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player_Node/Player"]
+build_mode = 1
+polygon = PoolVector2Array( -1.48645, -32.1985, -6.78375, -23.4579, -10.227, -12.7309, -11.0216, 1.30704, -10.227, 5.41245, -13.9351, 8.32596, -16.3231, 13.4814, -16.8534, 19.315, -15.4392, 24.4415, -12.7875, 19.1382, -9.78232, 17.1937, -7.13068, 16.133, -4.30225, 19.1382, 5.24368, 18.9614, 7.36502, 15.9562, 10.547, 17.3705, 14.2593, 21.7899, 14.9664, 24.4415, 16.9109, 20.7292, 17.4413, 15.6027, 15.6735, 11.1833, 12.3148, 6.58707, 10.547, 5.5264, 10.7238, -3.4892, 10.7238, -9.67639, 8.77924, -17.101, 6.83469, -21.874, 4.3598, -26.6469, 2.06171, -29.6522, 0.117157, -32.127 )
+
+[node name="Sprite" type="Sprite" parent="Player_Node/Player/CollisionPolygon2D"]
+modulate = Color( 0.447059, 0.431373, 1, 1 )
+texture = ExtResource( 9 )
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+position = Vector2( 0, 380 )
+shape = SubResource( 10 )
+passby_press = true
+
+[connection signal="area_entered" from="Player_Node/Player/Detect" to="Player_Node/Player" method="_on_Detect_area_entered"]
+[connection signal="body_entered" from="Player_Node/Player/Detect" to="Player_Node/Player" method="_on_Detect_body_entered"]
+[connection signal="area_entered" from="Player_Node/Player/Resetter" to="Player_Node/Player" method="_on_Resetter_area_entered"]
+[connection signal="body_entered" from="Player_Node/Player/Resetter" to="Player_Node/Player" method="_on_Resetter_body_entered"]
+[connection signal="pressed" from="TouchScreenButton" to="Player_Node/Player" method="_on_TouchScreenButton_pressed"]
+[connection signal="released" from="TouchScreenButton" to="Player_Node/Player" method="_on_TouchScreenButton_released"]

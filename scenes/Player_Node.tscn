@@ -1,0 +1,92 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://assets/sprites/Rocket_3.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Player.gd" type="Script" id=2]
+[ext_resource path="res://assets/sprites/star_tiny.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/Spotlight.png" type="Texture" id=4]
+
+[sub_resource type="Curve" id=1]
+min_value = -360.0
+max_value = 360.0
+_data = [ Vector2( 0, -198 ), 0.0, 0.0, 0, 0, Vector2( 0.994535, 254.455 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=2]
+curve = SubResource( 1 )
+
+[sub_resource type="Gradient" id=3]
+offsets = PoolRealArray( 0.1875, 0.4125, 1 )
+colors = PoolColorArray( 0.0313726, 0.776471, 0.670588, 1, 0.352941, 1, 0.905882, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0.785227 ), 0.0, 0.0, 0, 0, Vector2( 0.983606, 0.238636 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+flag_disable_z = true
+direction = Vector3( 0, 1, 0 )
+spread = 1.0
+gravity = Vector3( 0, 98, 0 )
+initial_velocity = 150.0
+initial_velocity_random = 0.5
+angular_velocity = 350.0
+angular_velocity_curve = SubResource( 2 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 830.674, 10 )
+
+[node name="Player_Node" type="Node2D"]
+position = Vector2( 480, 321.6 )
+
+[node name="Player" type="KinematicBody2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="Detect" type="Area2D" parent="Player"]
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Player/Detect"]
+build_mode = 1
+polygon = PoolVector2Array( -1.48645, -32.1985, -6.78375, -23.4579, -10.227, -12.7309, -11.0216, 1.30704, -10.227, 5.41245, -13.9351, 8.32596, -16.3231, 13.4814, -16.8534, 19.315, -15.4392, 24.4415, -12.7875, 19.1382, -9.78232, 17.1937, -7.13068, 16.133, -4.30225, 19.1382, 5.24368, 18.9614, 7.36502, 15.9562, 10.547, 17.3705, 14.2593, 21.7899, 14.9664, 24.4415, 16.9109, 20.7292, 17.4413, 15.6027, 15.6735, 11.1833, 12.3148, 6.58707, 10.547, 5.5264, 10.7238, -3.4892, 10.7238, -9.67639, 8.77924, -17.101, 6.83469, -21.874, 4.3598, -26.6469, 2.06171, -29.6522, 0.117157, -32.127 )
+
+[node name="Particles2D" type="Particles2D" parent="Player"]
+show_behind_parent = true
+position = Vector2( 0, 24.76 )
+amount = 10
+lifetime = 0.6
+local_coords = false
+process_material = SubResource( 7 )
+texture = ExtResource( 3 )
+
+[node name="Light2D" type="Light2D" parent="Player/Particles2D"]
+modulate = Color( 0.94902, 0.682353, 0.188235, 1 )
+position = Vector2( 0.481445, 26.9729 )
+texture = ExtResource( 4 )
+color = Color( 0.352941, 1, 0.905882, 1 )
+energy = 0.5
+shadow_enabled = true
+
+[node name="Resetter" type="Area2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Resetter"]
+position = Vector2( 0, 500 )
+shape = SubResource( 8 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
+build_mode = 1
+polygon = PoolVector2Array( -1.48645, -32.1985, -6.78375, -23.4579, -10.227, -12.7309, -11.0216, 1.30704, -10.227, 5.41245, -13.9351, 8.32596, -16.3231, 13.4814, -16.8534, 19.315, -15.4392, 24.4415, -12.7875, 19.1382, -9.78232, 17.1937, -7.13068, 16.133, -4.30225, 19.1382, 5.24368, 18.9614, 7.36502, 15.9562, 10.547, 17.3705, 14.2593, 21.7899, 14.9664, 24.4415, 16.9109, 20.7292, 17.4413, 15.6027, 15.6735, 11.1833, 12.3148, 6.58707, 10.547, 5.5264, 10.7238, -3.4892, 10.7238, -9.67639, 8.77924, -17.101, 6.83469, -21.874, 4.3598, -26.6469, 2.06171, -29.6522, 0.117157, -32.127 )
+
+[node name="Sprite" type="Sprite" parent="Player/CollisionPolygon2D"]
+modulate = Color( 0.447059, 0.431373, 1, 1 )
+texture = ExtResource( 1 )
+
+[connection signal="area_entered" from="Player/Detect" to="Player" method="_on_Detect_area_entered"]
+[connection signal="body_entered" from="Player/Detect" to="Player" method="_on_Detect_body_entered"]
+[connection signal="area_entered" from="Player/Resetter" to="Player" method="_on_Resetter_area_entered"]
+[connection signal="body_entered" from="Player/Resetter" to="Player" method="_on_Resetter_body_entered"]
